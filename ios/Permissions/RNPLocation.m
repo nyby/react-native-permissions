@@ -21,10 +21,8 @@
 {
     int status = [CLLocationManager authorizationStatus];
     switch (status) {
-        case kCLAuthorizationStatusAuthorizedAlways:
-            return RNPStatusAuthorized;
         case kCLAuthorizationStatusAuthorizedWhenInUse:
-            return [type isEqualToString:@"always"] ? RNPStatusDenied : RNPStatusAuthorized;
+            return RNPStatusAuthorized;
         case kCLAuthorizationStatusDenied:
             return RNPStatusDenied;
         case kCLAuthorizationStatusRestricted:
@@ -45,17 +43,9 @@
             self.locationManager.delegate = self;
         }
 
-        if ([type isEqualToString:@"always"]) {
-            [self.locationManager requestAlwaysAuthorization];
-        } else {
-            [self.locationManager requestWhenInUseAuthorization];
-        }
+        [self.locationManager requestWhenInUseAuthorization];
     } else {
-        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse && [type isEqualToString:@"always"]) {
-            completionHandler(RNPStatusDenied);
-        } else {
-            completionHandler(status);
-        }
+        completionHandler(status);
     }
 }
 
